@@ -376,7 +376,7 @@ def get_playlist_ids_from_google(local_channel_id):
     request = youtube.channels().list(part="contentDetails", id=local_channel_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -394,7 +394,7 @@ def get_playlist_name_from_google(local_playlist_id):
     request = youtube.playlists().list(part="snippet", id=local_playlist_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -470,7 +470,7 @@ def get_channel_name_from_google(local_channel_id):
     request = youtube.channels().list(part="brandingSettings", id=local_channel_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -579,7 +579,7 @@ def get_video_infos_for_one_video(video_id):
     request = youtube.videos().list(part="snippet", id=video_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -597,7 +597,7 @@ def get_geoblock_list_for_one_video(video_id):
     request = youtube.videos().list(part="contentDetails", id=video_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -706,7 +706,7 @@ def get_videos_from_playlist_from_google(local_playlist_id, next_page_token):
     response = ""
     try:
         response = request.execute()
-        add_quota(5)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -733,7 +733,7 @@ def get_changed_playlists(playlists):
             request = youtube.playlists().list(part="contentDetails", id=playlist_ids_to_check)
             try:
                 response = request.execute()
-                add_quota(3)
+                add_quota(1)
             except googleapiclient.errors.HttpError as error:
                 if "The request cannot be completed because you have exceeded your" in str(error):
                     set_quota_exceeded_state()
@@ -1323,7 +1323,7 @@ def check_video_ids_for_offline_state(video_ids_to_check):
     request = youtube.videos().list(part="status", id=video_ids_to_check)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -1378,7 +1378,7 @@ def check_channel_ids_for_offline_state(channel_ids_to_check):
     request = youtube.channels().list(part="status", id=channel_ids_to_check)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -1488,7 +1488,7 @@ def check_video_ids_for_upload_date(video_ids_to_check, download_date_limit=None
     request = youtube.videos().list(part="snippet", id=video_ids_to_check)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
