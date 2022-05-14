@@ -50,29 +50,28 @@ GRANT ALL ON mydatabase.* TO 'user' IDENTIFIED BY 'password';
 - As root run `systemctl enable --now yt-backup.timer`
 
 ## Config options
-### database
-- connection_info: Connection information to your already installed database. Make shure to append ?charset=utf8mb4 or something matching for your database engine.
 
-### base
-- download_dir: Directory where youtube-dl should put your videos before uploading it via rclone. BE CAREFUL!!! This directory will be cleaned with every new run. All data in this directory will be lost!
-- download_lockfile: Where to put download lockfile. This prevents, that multiple download jobs will run if script is planned via job
-- channel_naming: You can define here, how channels should be named by default. Possible parameters you can use: %channel_name, %channel_id
-- proxy_restart_command: If you have a proxy which can change it's IP adress, add it's restart command here.
+| **Name**       |                       | **Example**                                                                          | **Description**                                                                                                                               |
+|----------------|-----------------------|--------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| **database**   | connection_info       | "mysql+mysqldb://username:password@192.168.1.10:3306/ database_name?charset=utf8mb4" | Connection information to your database. Append ?charset=utf8mb4 to match DB.                                                                 |
+| **base**       | download_dir          | "/mnt/shares/yt-backup/tmp"                                                          | Directory where yt-dlp will put your videos before uploading it to destination via Rclone. **WARNING** This directory is erased on each run.  |
+|                | download_lockfile     | "/tmp/yt-backup-lockfile"                                                            | Location of lockfile, prevents any conflicts multiple runs at one time.                                                                       |
+|                | channel_naming        | "%channel_name [%channel_id]"                                                        | Define channel name per yt-dlp's [output template]().                                                                                         |
+|                | proxy_restart_command |                                                                                      | If you have a proxy which can change it's IP address, enter it's restart command here.                                                        |
+| **rclone**     | binary_path           | "/usr/bin/rclone"                                                                    |                                                                                                                                               |
+|                | config_path           | "/home/user/.config/rclone/rclone.conf"                                              | Rclone config path.                                                                                                                           |
+|                | move_or_copy          | "move"                                                                               | move or copy videos after download. Strongly recommend _move_.                                                                                |
+|                | upload_base_path      | "YouTube"                                                                            | Path where downloaded files will be uploaded to.                                                                                              |
+|                | upload_target         | "b2"                                                                                 | The Rclone remote where the downloaded files will be uploaded to.                                                                             |
+| **youtube-dl** | binary_path           | "/usr/local/bin/yt-dlp"                                                              | Location of yt-dlp binary.                                                                                                                    |
+|                | download-archive      | "/mnt/shares/yt-backup/archive.list"                                                 | yt-dlp archive file                                                                                                                           |
+|                | video-format          | "(bestvideo+bestaudio/best)"                                                         | Refer to yt-dlp's [format selection](). Defaults to best video possible.                                                                      |
+|                | naming-format         | "%(upload_date)s %(title).100s %(height)sp  %(id)s.%(ext)s"                          | Custom naming format, refer to yt-dlp's [output template]().                                                                                  |
+|                | additional-options    | --cookies /path/to/cookies.txt  --external-downloader aria2c                         | (optional) extra flags to be passed to yt-dlp for downloading.                                                                                |
+|                | min_sleep_interval    | 5                                                                                    | How many seconds to sleep between each video downloads minimum                                                                                |
+|                | max_sleep_interval    | 60                                                                                   | How many seconds to sleep between each video downloads maximum                                                                                |
+|                | proxy                 | socks5://127.0.0.1:1080                                                              | (optional) specify proxy and port which yt-dlp should use. Leave empty for no proxy usage.                                                    |
 
-### rclone
-- binary_path: Where to find your clone binary
-- config_path: Where to find your rclone config file
-- move_or_copy: Should rclone move or copy videos after download. Strongly recommend move.
-- upload_base_path: Where to upload the videos in your rclone remote
-- upload_target: The rclone remote to which the videos should be pushed
-
-### youtube-dl
-- binary_path: Where to find your youtube-dl binary
-- download-archive: Where to find your youtube-dl download archive. Could be an existing file.
-- video-format: This will be put to youtube-dl as --format option. Defaults to the best video possible
-- min_sleep_interval: How many seconds to sleep between two video downloads minimum
-- max_sleep_interval: How many seconds to sleep between two video downloads maximum
-- proxy: Which proxy and port youtube-dl should use to download videos. Leave empty for No proxy usage
 
 ## Usage
 ### Get help output
