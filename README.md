@@ -1,28 +1,23 @@
 
-# yt-backup
-Youtube Backup made easy
+# yt-backup  
+![version](https://img.shields.io/github/v/release/w0d4/yt-backup?color=0e7fc0&include_prereleases&style=flat-square)
 
-## What is this?
-This is a backup utility for youtube videos. Since youtube-dl works very well, yt-backup will use youtube-dl as downloader.
-Since youtube started aggressively blocking extensive youtube-dl crawls with HTTP 429 error, I have started fetching all metadata about channels, playlists and videos via google's youtube API and using youtube-dl only for downloading videos itself.
-All metadata will be stored in a database. To be flexible at this point, I have chosen sqlalchemy as ORM. So you can use any database which is supported by sqlalchemy.
-Databases are fine for storing stuff and getting it again, but not for visualizing things, I have created some grafana dashboards for visualizing the stats of the tool.
-Additionally, I have added support for automatic proxy restarts, in case you get a 429 error on your current IP. This option assumes, that after each command execution, the proxy will have a new IP adress.
+Backup utility for YouTube, using yt-dlp/youtube-dl alongside Google's YouTube Data API v3. 
+
+* Utilizes Google's YouTube API to fetch metadata of channels/playlists/videos to avoid rate limits
+* Supports checking hundreds of channels per run (within API limits)
+* Metadata such as filesize, video length, video descriptions stored in a SQL database, via SQLAlchemy
+* Grafana Dashboards for visualisation of data, as well as live monitoring
+* Proxy support
+
 
 ##  Dependencies
-- [Python 3.x.](http://www.python.org/)
-- Packages: sqlalchemy ConfigParser google-api-python-client google_auth_oauthlib mysql dateutil
-
-Install them with `pip`:
-```
-$ pip install -r requirements.txt
-```
-- Any sqlalchemy supported database with utf8mb4 support
-- [rclone](https://rclone.org/)
-- [youtube-dl](http://ytdl-org.github.io/youtube-dl/)
-- YouTube API key
-- credentials.json file for your API key
-- working grafana installation
+* [Python 3.x.](http://www.python.org/)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+* [rclone](https://rclone.org/)
+* A working SQL database with utf8mb4 support
+* Google YouTube Data API v3, YouTube API key
+* Grafana Dashboard (Optional)
 
 ## Installation
 1. Clone this repo
