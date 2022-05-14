@@ -14,22 +14,22 @@ Backup utility for YouTube, using yt-dlp/youtube-dl alongside Google's YouTube D
 ##  Dependencies
 * [Python 3.x.](http://www.python.org/)
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
-* [rclone](https://rclone.org/)
+* [Rclone](https://rclone.org/)
 * A working SQL database with utf8mb4 support
 * Google YouTube Data API v3, YouTube API key
 * Grafana Dashboard (Optional)
 
 ## Installation
 1. Clone this repo
-2. Create user in your DBMS with write permissions for a schema with utf8mb4 encoding
+2. Create a user in your DBMS with write permissions for a schema with utf8mb4 encoding
 ```sql
 CREATE DATABASE mydatabase CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 GRANT ALL ON mydatabase.* TO 'user' IDENTIFIED BY 'password';
 ```
-3. Configure an rclone remote. If remote points to cloud storage, I strongly recommend to add a crypt remote
-4. Modify `config.json.example` to match your system paths, database and rclone remote. Save this as `config.json`
-5. Put your client secret json from Google into project directory and name it `client_secret.json`
-6. Add your database as datasource in Grafana. Best name it `yt-backup`.
+3. Configure an Rclone remote. If remote points to cloud storage, crypt remote strongly recommended. 
+4. Modify `config.json.example` to match your system paths, database and Rclone remote. Save as `config.json`
+5. Create your YouTube API client_secret.json file and place inside the project directory 
+6. (Optional) Add your database as datasource in Grafana. Suggested name `yt-backup`.
 
 ### Creating client_secret.json file
 - Go to the Google [console](https://console.developers.google.com/).
