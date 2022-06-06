@@ -19,6 +19,10 @@ Backup utility for YouTube, using yt-dlp/youtube-dl alongside Google's YouTube D
 * Google YouTube Data API v3, YouTube API key
 * Grafana Dashboard (Optional)
 
+## Preview
+
+[![DASHBOARD](https://raw.githubusercontent.com/sideloading/yt-backup/readme_update/grafana-dashboards/dashboard.png)](#readme)
+
 ## Installation
 1. Clone this repo
 2. Create a user in your DBMS with write permissions for a schema with utf8mb4 encoding
