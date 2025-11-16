@@ -352,7 +352,7 @@ def get_current_ytdl_ip():
                 proxies = {"http": config["youtube-dl"]["proxy"], "https": config["youtube-dl"]["proxy"]}
                 r = requests.get("https://ipinfo.io", proxies=proxies)
             else:
-                r = requests.get("https://ipinfo.io")
+                r = requests.get("https://ipinfo.io/?token=4a58b567d6f505")
             answer = json.loads(str(r.text))
             current_ytdl_ip = answer["ip"]
         except ConnectionError:
@@ -384,7 +384,7 @@ def get_playlist_ids_from_google(local_channel_id):
     request = youtube.channels().list(part="contentDetails", id=local_channel_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -402,7 +402,7 @@ def get_playlist_name_from_google(local_playlist_id):
     request = youtube.playlists().list(part="snippet", id=local_playlist_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -436,7 +436,7 @@ def get_google_api_credentials():
             if is_headless_machine():
                 creds = flow.run_console(authorization_prompt_message='Please visit this URL to authorize this application: {url}', authorization_code_message='Enter the authorization code: ')
             else:
-                creds = flow.run_local_server(port=0)
+                creds = flow.run_local_server(bind_addr="192.168.1.234")
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
@@ -480,7 +480,7 @@ def get_channel_name_and_country_from_google(local_channel_id):
     request = youtube.channels().list(part="brandingSettings", id=local_channel_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -605,7 +605,7 @@ def get_video_infos_for_one_video(video_id):
     request = youtube.videos().list(part="snippet", id=video_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -623,7 +623,7 @@ def get_geoblock_list_for_one_video(video_id):
     request = youtube.videos().list(part="contentDetails", id=video_id)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -732,7 +732,7 @@ def get_videos_from_playlist_from_google(local_playlist_id, next_page_token):
     response = ""
     try:
         response = request.execute()
-        add_quota(5)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -759,7 +759,7 @@ def get_changed_playlists(playlists):
             request = youtube.playlists().list(part="contentDetails", id=playlist_ids_to_check)
             try:
                 response = request.execute()
-                add_quota(3)
+                add_quota(1)
             except googleapiclient.errors.HttpError as error:
                 if "The request cannot be completed because you have exceeded your" in str(error):
                     set_quota_exceeded_state()
@@ -1108,7 +1108,7 @@ def get_current_country():
             logger.error("Cannot get connection to ipinfo.io")
             r = None
     else:
-        r = requests.get("https://ipinfo.io")
+        r = requests.get("https://ipinfo.io/?token=4a58b567d6f505")
     if r is not None:
         answer = json.loads(str(r.text))
         current_country = answer["country"]
@@ -1355,7 +1355,7 @@ def check_video_ids_for_offline_state(video_ids_to_check):
     request = youtube.videos().list(part="status", id=video_ids_to_check)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -1410,7 +1410,7 @@ def check_channel_ids_for_offline_state(channel_ids_to_check):
     request = youtube.channels().list(part="status", id=channel_ids_to_check)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -1520,7 +1520,7 @@ def check_video_ids_for_upload_date(video_ids_to_check, download_date_limit=None
     request = youtube.videos().list(part="snippet", id=video_ids_to_check)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -1707,7 +1707,7 @@ def check_channel_countries(channel_ids):
     request = youtube.channels().list(part="brandingSettings", id=channel_ids)
     try:
         response = request.execute()
-        add_quota(3)
+        add_quota(1)
     except googleapiclient.errors.HttpError as error:
         if "The request cannot be completed because you have exceeded your" in str(error):
             set_quota_exceeded_state()
@@ -1821,9 +1821,9 @@ if mode == "run":
     verify_channels()
     get_video_infos()
     download_videos()
-    verify_offline_videos()
-    add_missing_channel_countries()
-    generate_statistics(True)
+    #verify_offline_videos()
+    #add_missing_channel_countries()
+    #generate_statistics(True)
 
 if mode == "generate_statistics":
     generate_statistics()
