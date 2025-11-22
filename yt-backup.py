@@ -43,6 +43,10 @@ from operation import Operation
 from playlist import Playlist
 from statistic import Statistic
 from video import Video
+from notifications import (
+    send_channel_offline_notification,
+    send_quota_exceeded_notification
+)
 
 api_service_name = "youtube"
 api_version = "v3"
@@ -313,6 +317,8 @@ def set_quota_exceeded_state():
     quota_exceeded_state.statistic_value = "Quota exceeded"
     session.add(quota_exceeded_state)
     session.commit()
+    # Send notification about quota exceeded
+    send_quota_exceeded_notification(config)
 
 
 def clear_quota_exceeded_state():
@@ -1430,6 +1436,8 @@ def check_channel_ids_for_offline_state(channel_ids_to_check):
                 logger.info("Channel " + str(channel.channel_name) + " is not online anymore. Setting status to offline.")
                 channel.offline = 1
                 session.add(channel)
+                # Send notification about channel going offline
+                send_channel_offline_notification(config, channel.channel_name, channel.channel_id)
                 channel_playlists = session.query(Playlist).filter(Playlist.channel_id == channel.id).all()
                 if channel_playlists is not None:
                     logger.info("Getting all playlists for channel " + str(channel.channel_name) + " from database for setting them all unmonitored.")

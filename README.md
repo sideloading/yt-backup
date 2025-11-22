@@ -17,6 +17,12 @@ Install them with `pip`:
 ```
 $ pip install -r requirements.txt
 ```
+
+Optional dependencies (for notifications):
+```
+$ pip install -r requirements-optional.txt
+```
+
 - Any sqlalchemy supported database with utf8mb4 support
 - [rclone](https://rclone.org/)
 - [youtube-dl](http://ytdl-org.github.io/youtube-dl/)
@@ -78,6 +84,29 @@ GRANT ALL ON mydatabase.* TO 'user' IDENTIFIED BY 'password';
 - min_sleep_interval: How many seconds to sleep between two video downloads minimum
 - max_sleep_interval: How many seconds to sleep between two video downloads maximum
 - proxy: Which proxy and port youtube-dl should use to download videos. Leave empty for No proxy usage
+
+### notifications (optional)
+This section is completely optional. If omitted or if apprise is not installed, the script will run normally without notifications.
+
+- enabled: Master switch to enable/disable all notifications
+- apprise_urls: Array of Apprise notification service URLs (e.g., ["discord://webhook_id/webhook_token", "mailto://user:pass@gmail.com"])
+- events: Individual toggles for different notification types:
+  - channel_offline: Notify when a channel is marked offline
+  - video_offline: Notify when videos are marked offline
+  - download_complete: Notify when a download run completes (with statistics)
+  - download_errors: Notify when download errors occur (HTTP 403, 429, etc.)
+  - quota_exceeded: Notify when YouTube API quota is exceeded
+  - new_videos: Notify when new videos are detected in monitored channels
+
+To use notifications, install apprise: `pip install -r requirements-optional.txt`
+
+For available Apprise notification services and URL formats, see: https://github.com/caronc/apprise
+
+Example notification URLs:
+- Discord: `discord://webhook_id/webhook_token`
+- Telegram: `tgram://bot_token/chat_id`
+- Email: `mailto://user:pass@gmail.com`
+- Slack: `slack://token_a/token_b/token_c`
 
 ## Usage
 ### Get help output
