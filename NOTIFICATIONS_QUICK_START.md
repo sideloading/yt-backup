@@ -12,6 +12,7 @@ pip install apprise
 {
   "notifications": {
     "enabled": true,
+    "send_test_on_run": false,
     "apprise_urls": [
       "tgram://YOUR_BOT_TOKEN/YOUR_CHAT_ID"
     ],
@@ -23,6 +24,8 @@ pip install apprise
   }
 }
 ```
+
+**Note:** Set `send_test_on_run: true` if you want a test notification every time you run `python3 yt-backup.py run`
 
 ### 3. Test it
 ```bash

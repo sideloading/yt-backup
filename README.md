@@ -89,6 +89,7 @@ GRANT ALL ON mydatabase.* TO 'user' IDENTIFIED BY 'password';
 This section is completely optional. If omitted or if apprise is not installed, the script will run normally without notifications.
 
 - enabled: Master switch to enable/disable all notifications
+- send_test_on_run: Send a test notification when running `python3 yt-backup.py run` (default: false)
 - apprise_urls: Array of Apprise notification service URLs (e.g., ["discord://webhook_id/webhook_token", "mailto://user:pass@gmail.com"])
 - events: Individual toggles for different notification types:
   - channel_offline: Notify when a channel is marked offline

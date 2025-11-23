@@ -27,6 +27,7 @@
   },
   "notifications": {
     "enabled": false,
+    "send_test_on_run": false,
     "apprise_urls": [],
     "events": {
       "channel_offline": true,

@@ -1834,8 +1834,9 @@ if mode == "download_videos":
     download_videos()
 
 if mode == "run":
-    # Send test notification to verify configuration
-    send_test_notification(config)
+    # Send test notification if enabled in config
+    if config.get("notifications", {}).get("send_test_on_run", False):
+        send_test_notification(config)
     verify_channels()
     get_video_infos()
     download_videos()
