@@ -31,10 +31,7 @@
     "events": {
       "channel_offline": true,
       "video_offline": false,
-      "download_complete": false,
-      "download_errors": false,
-      "quota_exceeded": true,
-      "new_videos": false
+      "quota_exceeded": true
     }
   }
 }

@@ -93,10 +93,7 @@ This section is completely optional. If omitted or if apprise is not installed, 
 - events: Individual toggles for different notification types:
   - channel_offline: Notify when a channel is marked offline
   - video_offline: Notify when videos are marked offline
-  - download_complete: Notify when a download run completes (with statistics)
-  - download_errors: Notify when download errors occur (HTTP 403, 429, etc.)
   - quota_exceeded: Notify when YouTube API quota is exceeded
-  - new_videos: Notify when new videos are detected in monitored channels
 
 To use notifications, install apprise: `pip install -r requirements-optional.txt`
 

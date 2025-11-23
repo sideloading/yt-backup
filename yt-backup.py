@@ -45,7 +45,9 @@ from statistic import Statistic
 from video import Video
 from notifications import (
     send_channel_offline_notification,
-    send_quota_exceeded_notification
+    send_quota_exceeded_notification,
+    send_test_notification,
+    send_video_offline_notification
 )
 
 api_service_name = "youtube"
@@ -57,7 +59,7 @@ Base.metadata.create_all(engine)
 session = Session()
 
 parser = argparse.ArgumentParser(description='yt-backup')
-parser.add_argument("mode", action="store", type=str, help="Valid options: add_channel, get_playlists, get_video_infos, download_videos, run, toggle_channel_download, generate_statistics, verify_offline_videos, verify_channels, list_playlists, modify_playlist, modify_channel, add_video")
+parser.add_argument("mode", action="store", type=str, help="Valid options: add_channel, get_playlists, get_video_infos, download_videos, run, toggle_channel_download, generate_statistics, verify_offline_videos, verify_channels, list_playlists, modify_playlist, modify_channel, add_video, test_notifications")
 parser.add_argument("--channel_id", action="store", type=str, help="Defines a channel ID to work on. Required for modes: add_channel")
 parser.add_argument("--username", action="store", type=str, help="Defines a channel name to work on. Required for modes: add_channel")
 parser.add_argument("--playlist_id", action="store", type=str, help="Defines a playlist ID to work on. Optional for modes: get_video_infos, download_videos")
@@ -911,6 +913,10 @@ def check_videos_online_state(videos_to_check_against, local_playlist_id):
         video = session.query(Video).filter(Video.video_id == str(offline_video_id)).scalar()
         video.online = video_status["offline"]
         session.add(video)
+        # Get channel name for notification
+        playlist = session.query(Playlist).filter(Playlist.id == video.playlist).scalar()
+        channel = session.query(Channel).filter(Channel.id == playlist.channel_id).scalar()
+        send_video_offline_notification(config, video.title, video.video_id, channel.channel_name)
     end_time = get_current_timestamp()
     log_operation(end_time - start_time, "check_online_state", "Checked online state for all videos of playlist_id " + str(local_playlist_id))
     session.commit()
@@ -1051,12 +1057,14 @@ def download_videos():
             video.online = video_status["offline"]
             session.add(video)
             commit_with_retry()
+            send_video_offline_notification(config, video.title, video.video_id, channel_name)
             continue
         if video_file == "offline":
             video.downloaded = None
             video.online = video_status["offline"]
             session.add(video)
             commit_with_retry()
+            send_video_offline_notification(config, video.title, video.video_id, channel_name)
             continue
         # get all the needed video infos
         # check if video is really there
@@ -1826,6 +1834,8 @@ if mode == "download_videos":
     download_videos()
 
 if mode == "run":
+    # Send test notification to verify configuration
+    send_test_notification(config)
     verify_channels()
     get_video_infos()
     download_videos()
@@ -1859,5 +1869,12 @@ if mode == "add_playlist":
 
 if mode == "verify_channels":
     verify_channels()
+
+if mode == "test_notifications":
+    logger.info("Testing notification configuration...")
+    if send_test_notification(config):
+        logger.info("Check your notification service(s) for the test message")
+    else:
+        logger.info("Notifications are not configured or disabled")
 
 persist_quota()

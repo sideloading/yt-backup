@@ -198,3 +198,44 @@ def send_new_videos_notification(config, channel_name, video_count):
     
     _send_notification(config, title, body)
     logger.info(f"Sent new videos notification for channel: {channel_name}")
+
+
+def send_test_notification(config):
+    """
+    Send a test notification to verify the configuration is working.
+    This is sent regardless of individual event settings, only checks global enabled flag.
+    
+    Args:
+        config: Configuration dictionary
+    
+    Returns:
+        bool: True if notification was sent (or attempted), False if notifications are disabled
+    """
+    if not APPRISE_AVAILABLE:
+        logger.info("Apprise not installed. Notifications are disabled.")
+        logger.info("To enable notifications, install apprise: pip install apprise")
+        return False
+    
+    if "notifications" not in config:
+        logger.info("No notifications section in config. Notifications are disabled.")
+        return False
+    
+    notification_config = config["notifications"]
+    
+    if not notification_config.get("enabled", False):
+        logger.info("Notifications are disabled in config (enabled: false)")
+        return False
+    
+    apprise_urls = notification_config.get("apprise_urls", [])
+    if not apprise_urls:
+        logger.warning("Notifications are enabled but no apprise_urls configured")
+        logger.info("Add notification service URLs to config.json under notifications.apprise_urls")
+        return False
+    
+    # Send test notification
+    title = "yt-backup Test Notification"
+    body = f"Notifications are working! Connected to {len(apprise_urls)} service(s).\n\nThis is a test message sent at startup."
+    
+    _send_notification(config, title, body)
+    logger.info(f"Test notification sent to {len(apprise_urls)} service(s)")
+    return True
